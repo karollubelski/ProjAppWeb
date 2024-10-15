@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UFT-8">
+        <title>Moja strona www</title>
+        <script src="skryptA.js"></script>
+        <script src="kolorujtlo.js" type="text/javascript"></script>
+        <script src="timedata.js" type="text/javascript"></script>
+    </head>
+    <body onload="startclock()">
+        <form method="post" name="background">
+            <input type="button" value="żółty" onclick="changeBackground('#fff000')">
+            <input type="button" value="czarny" onclick="changeBackground('#000000')">
+            <input type="button" value="biały" onclick="changeBackground('#ffffff')">
+            <input type="button" value="zielony" onclick="changeBackground('#00ff00')">
+            <input type="button" value="niebieski" onclick="changeBackground('#0000ff')">
+            <input type="button" value="pomarańczowy" onclick="changeBackground('#ff8000')">
+            <input type="button" value="szary" onclick="changeBackground('#c0c0c0')">
+            <input type="button" value="czerwony" onclick="changeBackground('#ff0000')">
+        </form>
+        <div id="zegarek"></div>
+        <div id="data"></div>
+    </body>
+</html>
