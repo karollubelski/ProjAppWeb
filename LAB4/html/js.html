@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UFT-8">
+        <title>Moja strona www</title>
+        <script src="js/kolorujtlo.js" type="text/javascript"></script>
+        <script src="js/timedata.js" type="text/javascript"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="../css/style2.css">
+
+    </head>
+    <body onload="startclock()">
+        <form method="post" name="background">
+            <input type="button" value="żółty" onclick="changeBackground('#fff000')">
+            <input type="button" value="czarny" onclick="changeBackground('#000000')">
+            <input type="button" value="biały" onclick="changeBackground('#ffffff')">
+            <input type="button" value="zielony" onclick="changeBackground('#00ff00')">
+            <input type="button" value="niebieski" onclick="changeBackground('#0000ff')">
+            <input type="button" value="pomarańczowy" onclick="changeBackground('#ff8000')">
+            <input type="button" value="szary" onclick="changeBackground('#c0c0c0')">
+            <input type="button" value="czerwony" onclick="changeBackground('#ff0000')">
+        </form>
+        <div id="zegarek"></div>
+        <div id="data"></div>
+
+        <div id="animacjaTestowa1" class="test-block">Kliknij, a się powiększę</div>
+        <script>
+            $("#animacjaTestowa1").on("click",function()
+            {
+                $(this).animate({
+                    width: "300px",
+                    opacity: 0.4,
+                    fontSize: "1.5em",
+                    borderWidth: "5px"
+                },1500);
+            });
+        </script>
+
+        <div id="animacjaTestowa2" class="test-block">Najedź kursorem, a się powiększe</div>
+        <script>
+            $(document).ready(function() {
+                $("#animacjaTestowa2").on({
+                    "mouseover" : function(){
+                        $(this).animate({
+                            width:300
+                        // height:1000
+                        }, 800);
+                    },
+            });
+        });
+        </script>
+
+        <div id="animacjaTestowaX" class="test-block">Najedź kursorem, a się powiększe i wrócę do normalnego rozmiaru</div>
+        <script>
+            $(document).ready(function() {
+                $("#animacjaTestowaX").on({
+                    "mouseover" : function(){
+                        $(this).animate({
+                            width:300
+                        // height:1000
+                        }, 800);
+                    },
+                    "mouseout":function(){
+                        $(this).animate({
+                            width:200
+                        },800);
+                    }
+            });
+        });
+        </script>
+
+
+        <div id="animacjaTestowa3" class="test-block">Klikaj, abym urósł</div>
+        <script>
+            $("#animacjaTestowa3").on("click",function(){
+                if(!$(this).is(":animated")){
+                    $(this).animate({
+                        width: "+=" + 50,
+                        height: "+=" + 10,
+                        opacity: "-=" + 0.1,
+                        duration: 3000
+                    });
+                }
+            });
+        </script>
+        
+        <button href="css/style2.css" style="margin-top: 50px;"onclick="window.location.href='index.html'">Powrót na główną</button>
+    </body>
+</html>
