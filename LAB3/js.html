@@ -24,29 +24,66 @@
         <div id="data"></div>
 
         <div id="animacjaTestowa1" class="test-block">Kliknij, a się powiększę</div>
-        
         <script>
             $("#animacjaTestowa1").on("click",function()
             {
                 $(this).animate({
-                    width: "500px",
+                    width: "300px",
                     opacity: 0.4,
-                    fontsize: "3em",
-                    borderwidth: "10px"
+                    fontSize: "1.5em",
+                    borderWidth: "5px"
                 },1500);
             });
         </script>
 
         <div id="animacjaTestowa2" class="test-block">Najedź kursorem, a się powiększe</div>
         <script>
-            $("#animacjaTestowa2").on({
-                "mouseover" : function(){
+            $(document).ready(function() {
+                $("#animacjaTestowa2").on({
+                    "mouseover" : function(){
+                        $(this).animate({
+                            width:300
+                        // height:1000
+                        }, 800);
+                    },
+            });
+        });
+        </script>
+
+        <div id="animacjaTestowaX" class="test-block">Najedź kursorem, a się powiększe i wrócę do normalnego rozmiaru</div>
+        <script>
+            $(document).ready(function() {
+                $("#animacjaTestowaX").on({
+                    "mouseover" : function(){
+                        $(this).animate({
+                            width:300
+                        // height:1000
+                        }, 800);
+                    },
+                    "mouseout":function(){
+                        $(this).animate({
+                            width:200
+                        },800);
+                    }
+            });
+        });
+        </script>
+
+
+        <div id="animacjaTestowa3" class="test-block">Klikaj, abym urósł</div>
+        <script>
+            $("#animacjaTestowa3").on("click",function(){
+                if(!$(this).is(":animated")){
                     $(this).animate({
-                        width:300
-                    }, 800);
+                        width: "+=" + 50,
+                        height: "+=" + 10,
+                        opacity: "-=" + 0.1,
+                        duration: 3000
+                    });
                 }
             });
-
         </script>
+        
+        <button href="style2.css" style="margin-top: 50px;"onclick="window.location.href='index.html'">Powrót na główną</button>
     </body>
 </html>
