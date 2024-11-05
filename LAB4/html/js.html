@@ -10,7 +10,7 @@
 
     </head>
     <body onload="startclock()">
-        <form method="post" name="background">
+        <form method="post" name="background" style="margin-bottom: 40px;">
             <input type="button" value="żółty" onclick="changeBackground('#fff000')">
             <input type="button" value="czarny" onclick="changeBackground('#000000')">
             <input type="button" value="biały" onclick="changeBackground('#ffffff')">
@@ -20,6 +20,9 @@
             <input type="button" value="szary" onclick="changeBackground('#c0c0c0')">
             <input type="button" value="czerwony" onclick="changeBackground('#ff0000')">
         </form>
+
+
+        
         <div id="zegarek"></div>
         <div id="data"></div>
 
@@ -84,6 +87,6 @@
             });
         </script>
         
-        <button href="css/style2.css" style="margin-top: 50px;"onclick="window.location.href='index.html'">Powrót na główną</button>
+        <button href="css/style2.css" style="margin-top: 50px;"onclick="window.location.href='../index.html'">Powrót na główną</button>
     </body>
 </html>
