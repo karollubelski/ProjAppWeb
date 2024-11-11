@@ -1,0 +1,25 @@
+.gallery {
+    display: grid ;
+    grid-template-columns: repeat(3, 1fr) ;
+    gap: 0px;
+    margin-top: 10px ;
+}
+.gallery-item {
+    text-align: center;
+    margin-top: 0px;
+}
+
+.gallery-item img {
+    width: 100% ;
+    height: 900px ;
+    object-fit: cover ;
+    border-radius: 10px ;
+    transform: scale(0.7);
+}
+
+.gallery-item p {
+    margin-top: -120px;
+    font-weight: bold;
+    text-align: center;
+
+}
