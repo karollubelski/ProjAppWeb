@@ -1,5 +1,6 @@
 <?php
 include 'cfg.php';
+include 'showpage.php';
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -41,43 +42,21 @@ include 'cfg.php';
 </div>
 
     <div class="content">
-        <?php
+    <?php
+        // Wyświetlanie błędów PHP (opcjonalne, pomocne podczas debugowania)
         error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
-        //dynamiczne ładowanie stron
-        $strona = 'html/glowna.html'; //domyslna strona po wejsciu z indexu.php
-        if (isset($_GET['idp'])) {
-            switch ($_GET['idp']) {
-                case 'glowna':
-                    $strona = 'html/glowna.html';
-                    break;
-                case 'najwieksze':
-                    $strona = 'html/najwieksze.html';
-                    break;
-                case 'galeria':
-                    $strona = 'html/galeria.html';
-                    break;
-                case 'ciekawostki':
-                    $strona = 'html/ciekawostki.html';
-                    break;
-                case 'contact':
-                    $strona = 'html/contact.html';
-                    break;
-                case 'filmy':
-                    $strona = 'html/filmy.html';
-                    break;
-                case 'js':
-                    $strona = 'html/js.html';
-                    break;
-            }
-        }
+        // Dołączenie pliku showpage.php, gdzie znajduje się funkcja PokazPodstrone
+        include 'showpage.php';
 
-        // sprawdza czy plik istnieje
-        if (file_exists($strona)) {
-            include($strona);
-        } else {
-            echo "Strona nie istnieje.";
-        }
+        // Pobranie parametru 'idp' z adresu URL, z domyślną wartością 'glowna' dla strony głównej
+        $idp = isset($_GET['idp']) ? $_GET['idp'] : 'glowna';
+
+        // Wywołanie funkcji, aby pobrać treść z bazy danych na podstawie id strony
+        $content = PokazPodstrone($idp);
+
+        // Wyświetlenie zawartości strony (HTML z bazy danych)
+        echo $content;
         ?>
     </div>
 

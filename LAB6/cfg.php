@@ -1,13 +1,13 @@
 <?php
-// Dane połączenia z bazą danych
-$host = 'localhost';
-$dbname = 'moja_strona';
-$username = 'root';  // domyślny użytkownik w XAMPP to zazwyczaj 'root'
-$password = '';      // zazwyczaj bez hasła
+$dbhost = 'localhost';
+$dbuser = 'root';
+$dbpass = '';
+$baza = 'moja_strona';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Błąd połączenia z bazą danych: " . $e->getMessage());
+$link = mysqli_connect($dbhost, $dbuser, $dbpass, $baza);
+if (!$link) {
+    echo '<b>przerwane połączenie</b>';
+} else {
+    echo 'Połączono z bazą danych';
 }
+?>
