@@ -7,7 +7,5 @@ $baza = 'moja_strona';
 $link = mysqli_connect($dbhost, $dbuser, $dbpass, $baza);
 if (!$link) {
     echo '<b>przerwane połączenie</b>';
-} else {
-    echo 'Połączono z bazą danych';
 }
 ?>

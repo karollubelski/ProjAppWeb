@@ -20,4 +20,4 @@ function PokazPodstrone($id) {
     }
 
     return $web;
-}
+}   

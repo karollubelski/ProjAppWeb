@@ -1,6 +1,5 @@
 <?php
 include 'cfg.php';
-include 'showpage.php';
 ?>
 <!DOCTYPE html>
 <html lang="pl">
@@ -29,26 +28,27 @@ include 'showpage.php';
         </div>
     </div>
 
-    <div class="menu">
-    <ul>
-        <li><a href="showpage.php?idp=glowna">Strona Główna</a></li>
-        <li><a href="showpage.php?idp=najwieksze">Największe Budynki</a></li>
-        <li><a href="showpage.php?idp=galeria">Galeria</a></li>
-        <li><a href="showpage.php?idp=ciekawostki">Ciekawostki</a></li>
-        <li><a href="showpage.php?idp=contact">Kontakt</a></li>
-        <li><a href="showpage.php?idp=filmy">Filmy</a></li>  
-        <li><a href="showpage.php?idp=js">Skrypty</a></li> 
-    </ul>
-</div>
-
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.php?idp=glowna">Strona Główna</a></li>
+                <li><a href="index.php?idp=najwieksze">Największe Budynki</a></li>
+                <li><a href="index.php?idp=galeria">Galeria</a></li>
+                <li><a href="index.php?idp=ciekawostki">Ciekawostki</a></li>
+                <li><a href="index.php?idp=contact">Kontakt</a></li>
+                <li><a href="index.php?idp=filmy">Filmy</a></li>  
+                <li><a href="index.php?idp=skrypty">Skrypty</a></li> 
+            </ul>
+        </nav>
+    </header>
+    
     <div class="content">
-    <?php
+        <?php
         // Wyświetlanie błędów PHP (opcjonalne, pomocne podczas debugowania)
         error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
         // Dołączenie pliku showpage.php, gdzie znajduje się funkcja PokazPodstrone
         include 'showpage.php';
-
         // Pobranie parametru 'idp' z adresu URL, z domyślną wartością 'glowna' dla strony głównej
         $idp = isset($_GET['idp']) ? $_GET['idp'] : 'glowna';
 
