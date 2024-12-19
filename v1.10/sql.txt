@@ -1,0 +1,70 @@
+---admin table
+
+CREATE TABLE administrators (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    reset_token VARCHAR(100) NULL,
+    token_expiry DATETIME NULL
+);
+----add admin
+localhost/LAB8/add_admin.php
+
+
+---categories table
+
+CREATE TABLE kategorie (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    matka INT DEFAULT 0,
+    nazwa VARCHAR(255) NOT NULL
+);
+
+--add categories
+INSERT INTO kategorie (id, matka, nazwa) 
+VALUES
+(1, 0, 'Elektronika'),       -- Główna kategoria
+(2, 1, 'Tablety'),           -- Podkategoria Elektroniki
+(3, 1, 'Telefony'),          -- Podkategoria Elektroniki
+(4, 0, 'Laptopy'),           -- Nowa główna kategoria
+(5, 4, 'Gamingowe'),         -- Podkategoria Laptopów
+(6, 4, 'Biznesowe');         -- Podkategoria Laptopów
+
+
+
+-- prodcuts table
+CREATE TABLE produkty (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tytul VARCHAR(255) NOT NULL,
+    opis TEXT,
+    data_utworzenia DATETIME NOT NULL,
+    data_modyfikacji DATETIME NOT NULL,
+    data_wygasniecia DATE,
+    cena_netto DECIMAL(10,2) NOT NULL,
+    vat DECIMAL(5,2) NOT NULL,
+    ilosc INT NOT NULL DEFAULT 0,
+    dostepnosc ENUM('dostepny', 'niedostepny', 'oczekujacy') NOT NULL DEFAULT 'dostepny',
+    kategoria_id INT,
+    gabaryt ENUM('maly', 'sredni', 'duzy') NOT NULL,
+    zdjecie VARCHAR(255),
+    FOREIGN KEY (kategoria_id) REFERENCES kategorie(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--- inserting new products into categories
+INSERT INTO produkty (tytul, opis, data_utworzenia, data_modyfikacji, data_wygasniecia, cena_netto, vat, ilosc, dostepnosc, kategoria_id, gabaryt, zdjecie) 
+VALUES 
+('Smartfon A1', 'Nowoczesny smartfon z dużym ekranem.', NOW(), NOW(), '2025-12-31', 1200.00, 23.00, 50, 'dostepny', 1, 'sredni', 'smartfon_a1.jpg'),
+
+('Laptop X200', 'Lekki i wydajny laptop.', NOW(), NOW(), '2026-01-15', 3500.00, 23.00, 20, 'dostepny', 2, 'duzy', 'laptop_x200.jpg'),
+
+('Telewizor 4K', 'Telewizor o rozdzielczości 4K z funkcjami Smart TV.', NOW(), NOW(), NULL, 2500.00, 23.00, 10, 'dostepny', 3, 'duzy', 'tv_4k.jpg'),
+
+('Tablet Z3', 'Wydajny tablet do pracy i rozrywki.', NOW(), NOW(), '2025-06-30', 800.00, 23.00, 30, 'dostepny', 1, 'sredni', 'tablet_z3.jpg'),
+
+('Konsola G7', 'Najnowsza generacja konsoli do gier.', NOW(), NOW(), NULL, 2000.00, 23.00, 15, 'dostepny', 4, 'sredni', 'konsola_g7.jpg'),
+
+('Smartwatch M5', 'Smartwatch z monitorowaniem aktywności.', NOW(), NOW(), '2025-03-15', 600.00, 23.00, 40, 'dostepny', 1, 'maly', 'smartwatch_m5.jpg'),
+
+('Głośnik Bluetooth', 'Przenośny głośnik o wysokiej jakości dźwięku.', NOW(), NOW(), NULL, 300.00, 23.00, 60, 'dostepny', 5, 'maly', 'glosnik_bt.jpg'),
+
+('Aparat fotograficzny P1', 'Profesjonalny aparat fotograficzny.', NOW(), NOW(), '2025-09-30', 4500.00, 23.00, 5, 'dostepny', 6, 'duzy', 'aparat_p1.jpg');
