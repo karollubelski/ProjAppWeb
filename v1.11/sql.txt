@@ -1,0 +1,158 @@
+---admin table
+
+CREATE TABLE administrators (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    reset_token VARCHAR(100) NULL,
+    token_expiry DATETIME NULL
+);
+----add admin
+localhost/LAB8/add_admin.php
+
+
+---categories table
+
+CREATE TABLE kategorie (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    matka INT DEFAULT 0,
+    nazwa VARCHAR(255) NOT NULL
+);
+
+
+-- prodcuts table
+CREATE TABLE IF NOT EXISTS produkty (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tytul VARCHAR(255) NOT NULL,
+    opis TEXT,
+    data_utworzenia DATETIME NOT NULL,
+    data_modyfikacji DATETIME NOT NULL,
+    data_wygasniecia DATE,
+    cena_netto DECIMAL(10,2) NOT NULL,
+    vat DECIMAL(5,2) NOT NULL,
+    ilosc INT NOT NULL DEFAULT 0,
+    status ENUM('dostepny', 'niedostepny', 'oczekujacy') NOT NULL DEFAULT 'dostepny',
+    kategoria_id INT,
+    gabaryt ENUM('maly', 'sredni', 'duzy') NOT NULL,
+    zdjecie VARCHAR(255),
+    FOREIGN KEY (kategoria_id) REFERENCES kategorie(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--- inserting new products into categories
+INSERT INTO produkty (
+    tytul, 
+    opis, 
+    data_utworzenia, 
+    data_modyfikacji, 
+    data_wygasniecia, 
+    cena_netto, 
+    vat, 
+    ilosc, 
+    status, 
+    kategoria_id, 
+    gabaryt, 
+    zdjecie
+) VALUES 
+(
+    'Power Bank 20000mAh',
+    'Uniwersalny power bank do urządzeń mobilnych',
+    NOW(),
+    NOW(),
+    DATE_ADD(NOW(), INTERVAL 2 YEAR),
+    199.99,
+    23.00,
+    30,
+    'dostepny',
+    1,  -- Elektronika
+    'maly',
+    'powerbank.jpg'
+);
+
+-- Produkty do kategorii Tablety (id: 2)
+INSERT INTO produkty (
+    tytul, 
+    opis, 
+    data_utworzenia, 
+    data_modyfikacji, 
+    data_wygasniecia, 
+    cena_netto, 
+    vat, 
+    ilosc, 
+    status, 
+    kategoria_id, 
+    gabaryt, 
+    zdjecie
+) VALUES 
+(
+    'iPad Pro 12.9',
+    'Najnowszy iPad Pro z wyświetlaczem Liquid Retina XDR',
+    NOW(),
+    NOW(),
+    DATE_ADD(NOW(), INTERVAL 1 YEAR),
+    4499.99,
+    23.00,
+    15,
+    'dostepny',
+    2,  -- Tablety
+    'sredni',
+    'ipad_pro.jpg'
+),
+(
+    'Samsung Galaxy Tab S8',
+    'Tablet z systemem Android i rysikiem S Pen',
+    NOW(),
+    NOW(),
+    DATE_ADD(NOW(), INTERVAL 1 YEAR),
+    3299.99,
+    23.00,
+    10,
+    'dostepny',
+    2,  -- Tablety
+    'sredni',
+    'galaxy_tab.jpg'
+);
+
+-- Produkty do kategorii Telefony (id: 3)
+INSERT INTO produkty (
+    tytul, 
+    opis, 
+    data_utworzenia, 
+    data_modyfikacji, 
+    data_wygasniecia, 
+    cena_netto, 
+    vat, 
+    ilosc, 
+    status, 
+    kategoria_id, 
+    gabaryt, 
+    zdjecie
+) VALUES 
+(
+    'iPhone 14 Pro',
+    'Smartfon Apple z dynamiczną wyspą i aparatem 48MP',
+    NOW(),
+    NOW(),
+    DATE_ADD(NOW(), INTERVAL 1 YEAR),
+    4899.99,
+    23.00,
+    20,
+    'dostepny',
+    3,  -- Telefony
+    'maly',
+    'iphone14.jpg'
+),
+(
+    'Samsung Galaxy S23',
+    'Flagowy smartfon Samsung z procesorem Snapdragon',
+    NOW(),
+    NOW(),
+    DATE_ADD(NOW(), INTERVAL 1 YEAR),
+    3999.99,
+    23.00,
+    25,
+    'dostepny',
+    3,  -- Telefony
+    'maly',
+    'galaxy_s23.jpg'
+);
