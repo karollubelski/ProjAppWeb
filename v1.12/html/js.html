@@ -1,0 +1,79 @@
+<form method="post" name="background" style="margin-bottom: 40px;">
+    <input type="button" value="żółty" onclick="changeBackground('#fff000')" style="width: 100px;text-align: center;">
+    <input type="button" value="czarny" onclick="changeBackground('#000000')" style="width: 100px">
+    <input type="button" value="biały" onclick="changeBackground('#ffffff')" style="width: 100px">
+    <input type="button" value="zielony" onclick="changeBackground('#00ff00')"style="width: 100px">
+    <input type="button" value="niebieski" onclick="changeBackground('#0000ff')" style="width: 100px">
+    <input type="button" value="pomarańczowy" onclick="changeBackground('#ff8000')" style="width: 135px">
+    <input type="button" value="szary" onclick="changeBackground('#c0c0c0')" style="width: 100px">
+    <input type="button" value="czerwony" onclick="changeBackground('#ff0000')" style="width: 100px">
+</form>
+
+<div id="animacjaTestowa1" class="test-block">Kliknij, a się powiększę</div>
+<script>
+    $("#animacjaTestowa1").on("click",function()
+    {
+        $(this).animate({
+            width: "300px",
+            opacity: 0.4,
+            fontSize: "1.5em",
+            borderWidth: "5px"
+        },1500);
+    });
+</script>
+
+<div id="animacjaTestowa2" class="test-block">Najedź kursorem, a się powiększe</div>
+<script>
+    $(document).ready(function() {
+        $("#animacjaTestowa2").on({
+            "mouseover": function() {
+                $(this).animate({
+                    width: 300
+                }, 800);
+            },
+            "mouseout": function() {
+                $(this).animate({
+                    width: 200,
+                }, 800);
+            }
+        });
+    });
+</script>
+
+<div id="animacjaTestowa3" class="test-block">Najedź kursorem, a się powiększe i wrócę do normalnego rozmiaru</div>
+<script>
+    $(document).ready(function() {
+        $("#animacjaTestowa3").on({
+            "mouseover": function() {
+                $(this).animate({
+                    width: 320,
+                    height: 150
+                }, 800);
+            },
+            "mouseout": function() {
+                $(this).animate({
+                    width: 200,
+                    height: 75
+                }, 1000);
+            }
+        });
+    });
+                    
+</script>
+
+
+<div id="animacjaTestowa4" class="test-block">Klikaj, abym urósł</div>
+<script>
+    $("#animacjaTestowa4").on("click",function(){
+        if(!$(this).is(":animated")){
+            $(this).animate({
+                width: "+=" + 50,
+                height: "+=" + 10,
+                opacity: "-=" + 0.1,
+                duration: 3000
+            });
+        }
+    });
+</script>
+
+<button style="margin-top: 176px;"onclick="window.location.href='index.php?idp=glowna'">Powrót na główną</button>
