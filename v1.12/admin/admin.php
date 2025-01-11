@@ -183,7 +183,7 @@ function WyswietlKategorie($db, $matkaId = 0, $glebokosc = 0) {
 // Funkcja dodawania kategorii
 function DodajKategorie($db) {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $kategorie = explode("\n", $_POST['kategorie']); // Pobieramy kategorie z pola tekstowego
+        $kategorie = explode("\n", $_POST['kategorie']); // pobierane kategorie z pola tekstowego
         $matkaId = intval($_POST['matka']); // ID matki kategorii
 
         foreach ($kategorie as $kategoria) {
@@ -295,7 +295,7 @@ class ZarzadzajProduktami {
             $data_utworzenia = date('Y-m-d H:i:s');
             $data_wygasniecia = $_POST['data_wygasniecia'];
 
-            // --- Walidacja URL --- (opcjonalnie, ale zalecane)
+            // --- Walidacja URL ---
             if (!filter_var($zdjecie, FILTER_VALIDATE_URL)) {
                 echo "<p>Nieprawidłowy URL zdjęcia.</p>";
                 return;
@@ -318,7 +318,7 @@ class ZarzadzajProduktami {
         }
 
         // Formularz dodawania produktu
-        $kategorie = $this->PobierzKategorie(); // Zakładam, że ta funkcja istnieje
+        $kategorie = $this->PobierzKategorie();
         echo "
         <h2>Dodaj nowy produkt</h2>
         <form method='POST'>
@@ -487,11 +487,11 @@ class ZarzadzajProduktami {
         $stmt->execute();
         $result = $stmt->get_result();
 
-       // Wyświetlanie formularza wyszukiwania z poprawionym układem
+       // Wyświetlanie formularza wyszukiwania
        echo "<div class='controls' style='margin: 20px auto; padding: 20px; background: #f5f5f5; border-radius: 5px; max-width: 100%;'>";
        echo "<h2 style='text-align: center; margin-bottom: 20px;'>Lista produktów</h2>";
        
-       // Przycisk "Dodaj nowy produkt" wycentrowany
+       // Przycisk "Dodaj nowy produkt" 
        echo "<div style='text-align: left; margin-bottom: 20px;'>";
        echo "<a href='?action=add_products' class='button' style='background: #4CAF50; color: white; padding: 10px 20px; text-decoration: none; border-radius: 3px; display: inline-block;'>➕ Dodaj nowy produkt</a>";
        echo "</div>";

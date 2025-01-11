@@ -1,0 +1,919 @@
+/* Reset i podstawowe style */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 250px 1fr 300px;
+    gap: 30px;
+    position: relative;
+}
+
+
+/* Nagłówek */
+h1 {
+    grid-column: 1 / -1;
+    padding: 20px 0;
+    color: #15304c;
+    font-size: 2.5em;
+    text-align: center;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 30px;
+    font-family: 'Playfair Display', serif;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Panel kategorii */
+.kategorie {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: fit-content;
+    margin-left: -160px;
+    width: 100%;
+}
+
+.kategorie h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.kategorie ul {
+    list-style: none;
+}
+
+.kategorie li {
+    margin-bottom: 10px;
+}
+
+.kategorie a {
+    color: #566573;
+    text-decoration: none;
+    display: block;
+    padding: 5px 6px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.kategorie a:hover {
+    background: #f0f2f5;
+    color: #2c3e50;
+}
+
+
+/* Style dla menu kategorii */
+.category-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.main-category {
+    margin: 5px 0;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.subcategories {
+    list-style: none;
+    margin: 0;
+    padding-left: 20px;
+    display: none;
+}
+
+.subcategories.active {
+    display: block;
+}
+
+.toggle-subcategories {
+    background: none;
+    border: none;
+    padding: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+.toggle-subcategories.active {
+    transform: rotate(90deg);
+}
+
+.arrow-icon {
+    width: 12px;
+    height: 12px;
+}
+
+
+/* podkategorie */
+.subcategories .main-category {
+    margin-left: 15px;
+    position: relative;
+}
+
+.subcategories .main-category::before {
+    content: '';
+    position: absolute;
+    left: -15px;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background-color: #ddd;
+}
+
+.category-header a {
+    text-decoration: none;
+    color: #333;
+    padding: 5px 0;
+}
+
+.category-header a:hover {
+    color: #007bff;
+}
+
+
+/* Lista produktów */
+.produkty {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    /* grid-template-columns: repeat(4, 1fr); */
+    gap: 20px;
+    align-content: start;
+    
+}
+
+.produkt {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.produkt:hover {
+    transform: translateY(-5px);
+}
+
+.produkt img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 15px;
+}
+
+.produkt h3 {
+    color: #2c3e50;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    min-height: 40px;
+}
+
+.produkt p {
+    color: #566573;
+    margin-bottom: 15px;
+    font-size: 0.9em;
+}
+
+.produkt form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.produkt input[type="number"] {
+    width: 60px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.produkt button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.produkt button:hover {
+    background: #2980b9;
+}
+
+.koszyk-ikona {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+}
+
+.cart-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease;
+}
+
+.koszyk-ikona:hover .cart-icon {
+    transform: scale(1.1);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #3498db;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    bottom: -30px;
+    right: 50%;
+    transform: translateX(50%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.koszyk-ikona:hover .cart-tooltip {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cart-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
+/* Modal koszyka */
+.koszyk-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 50px;
+}
+
+.koszyk-modal .koszyk {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 1000px;
+    max-height: 100vh;
+    overflow-y: auto;
+    position: absolute;
+    top: 50%;         
+    left: 50%;       
+    transform: translate(-50%, -50%); 
+}
+
+.koszyk-modal.active {
+    display: block;
+}
+
+.koszyk {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.koszyk-zamknij {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+    color: #666;
+}
+
+.koszyk h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    padding-right: 30px;
+}
+
+.koszyk table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.koszyk th,
+.koszyk td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.koszyk td img {
+    max-width: 50px;
+    height: auto;    
+    vertical-align: middle; 
+    margin-right: 10px; 
+}
+
+.koszyk th {
+    color: #2c3e50;
+    font-weight: 600;
+    background: #f5f5f5;
+}
+
+.koszyk input[type="number"] {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.koszyk button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-right: 10px;
+}
+
+.koszyk button:hover {
+    background: #2980b9;
+}
+
+.koszyk a {
+    color: #e74c3c;
+    text-decoration: none;
+}
+
+.koszyk a:hover {
+    text-decoration: underline;
+}
+
+.koszyk-suma {
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: right;
+    margin: 20px 0;
+}
+
+
+/* Panel logownaia */
+.auth-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 40px auto;
+    transition: transform 0.3s ease;
+}
+
+.auth-container:hover {
+    transform: translateY(-5px);
+}
+
+.auth-container h2 {
+    color: #15304c;
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.auth-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.auth-form label {
+    display: block;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.auth-form button {
+    width: 100%;
+    padding: 0.75rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+.auth-form button:hover {
+    background: #2980b9;
+}
+
+.auth-container p {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #566573;
+}
+
+.auth-container a {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.auth-container a:hover {
+    text-decoration: underline;
+}
+
+.error {
+    background: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #b91c1c;
+    padding: 0.75rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.user-panel {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.user-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+}
+
+.user-icon {
+    width: 32px;
+    height: 32px;
+    transition: transform 0.3s ease;
+}
+
+.username {
+    color: #2c3e50;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.user-button:hover .user-icon {
+    transform: scale(1.1);
+}
+
+.user-button:hover .username {
+    color: #3498db;
+}
+
+.user-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 8px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 8px 0;
+    min-width: 150px;
+    display: none;
+    animation: slideDown 0.3s ease;
+}
+
+.user-menu.active {
+    display: block;
+}
+
+.user-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: background 0.3s ease;
+}
+
+.user-menu a:hover {
+    background: #f5f5f5;
+    color: #3498db;
+}
+
+/* Style dla formularza resetowania hasła */
+.password-reset-container {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 40px auto;
+    transition: transform 0.3s ease;
+}
+
+.password-reset-container:hover {
+    transform: translateY(-5px);
+}
+
+.password-reset-container h2 {
+    color: #15304c;
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.password-reset-container .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.password-reset-container label {
+    display: block;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.password-reset-container input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.password-reset-container input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.password-reset-container .btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-top: 1rem;
+}
+
+.password-reset-container .btn:hover {
+    background: #2980b9;
+}
+
+/* Style dla komunikatów o błędach i sukcesie */
+.alert {
+    padding: 0.75rem;
+    border-radius: 5px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.alert-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.alert-danger {
+    background: #fee2e2;
+    border: 1px solid #ef4444;
+    color: #b91c1c;
+}
+
+/* Style dla kontenera zmiany haslal */
+
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-container input {
+    padding-right: 40px;
+}
+
+/* Style dla przycisku pokazywania/ukrywania hasła */
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #566573;
+    transition: color 0.3s ease;
+}
+
+.toggle-password:hover {
+    color: #3498db;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+.password-requirements {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 15px 0;
+    font-size: 0.9em;
+}
+
+.password-requirements p {
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.password-requirements ul {
+    list-style: none;
+    padding-left: 15px;
+}
+
+.password-requirements li {
+    color: #566573;
+    margin-bottom: 5px;
+    position: relative;
+}
+
+.password-requirements li:before {
+    content: "•";
+    color: #3498db;
+    position: absolute;
+    left: -15px;
+}
+
+
+/* styl dla modalu danych */
+.order-form-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+}
+
+.order-form {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.errors {
+    background-color: #fff3f3;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ff0000;
+    border-radius: 4px;
+}
+
+.error {
+    color: #ff0000;
+    margin: 0;
+}
+
+
+/* Panel zamówień użytkownika */
+
+.orders-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.order-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    padding: 15px;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.order-details {
+    display: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.order-card.active .order-details {
+    display: block;
+}
+
+.order-items {
+    margin-top: 15px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.9em;
+}
+
+.status-new { background: #e3f2fd; color: #1976d2; }
+.status-processing { background: #fff3e0; color: #f57c00; }
+.status-completed { background: #e8f5e9; color: #388e3c; }
+
+.back-button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-button:hover {
+    background-color: #e0e0e0;
+}
+
+/* .scaled-image {
+    transform: scale(0.8);
+    transform-origin: center;
+    display: block;
+    margin: auto;
+} */
+
+
+/* Responsywność dla urzadzen */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+@media (max-width: 992px) {
+    .container {
+        grid-template-columns: 1fr;
+    }
+    
+    .kategorie {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .produkty {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        margin: 20px;
+        padding: 1.5rem;
+    }
+    .password-reset-container {
+        margin: 20px;
+        padding: 1.5rem;
+    }
+}

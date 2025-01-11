@@ -24,6 +24,8 @@ include 'cfg.php';
     <script src="js/timedata.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/darkmode.js" type="text/javascript"></script>
+
 
     <!-- Czcionki Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,10 +35,12 @@ include 'cfg.php';
 
 <body onload="startclock()">
 
+
     <!-- Zegarek na menu barze -->
     <div class="top">
         <data style="width: 33vw;"></data>
         <h1>Największe Budynki Świata</h1>
+        <!-- <img id="darkModeToggle" src="img/night-mode.png" alt="Dark Mode" style="width: 25px; height: 25px; cursor: pointer; margin-right: 100px;"> -->
         <div style="text-align: right; width: 31vw;">
             <div id="zegarek"></div>
             <div id="data"></div>
@@ -54,7 +58,9 @@ include 'cfg.php';
                 <li><a href="index.php?idp=contact">Kontakt</a></li>
                 <li><a href="index.php?idp=filmy">Filmy</a></li>  
                 <li><a href="index.php?idp=skrypty">Skrypty</a></li> 
+                <li><a href="./shop/cart.php">Sklep</a></li> 
             </ul>
+            <img id="darkModeToggle" src="img/night-mode.png" alt="Dark Mode" style="width: 25px; height: 25px; cursor: pointer;">
         </nav>
     </header>
     
@@ -75,11 +81,11 @@ include 'cfg.php';
     </div>
 
     <!-- Jedno z zadań z php-a -->
-    <?php
+    <!-- <?php
     $nr_indeksu = '169330';
     $nrGrupy = '3';
     echo '<p>Autor: Karol Lubelski ' . htmlspecialchars($nr_indeksu) . ' grupa ' . htmlspecialchars($nrGrupy) . '</p>';
-    ?>
+    ?> -->
 
     <!-- Footer -->
     <div class="footer"><p>Karol Lubelski</p></div>

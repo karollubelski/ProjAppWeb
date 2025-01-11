@@ -1,0 +1,361 @@
+----installing phpmailer
+cd C:\xampp\htdocs\projects\v1.11\
+composer init -skip all to create json
+composer require phpmailer/phpmailer
+
+----------------------------------------------------------------------
+---page_list
+CREATE TABLE `page_list2` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `page_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
+  `status_strony` int(11) DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+---users table
+CREATE TABLE users (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+---admin table
+CREATE TABLE administrators (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    login VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    reset_token VARCHAR(100) NULL,
+    token_expiry DATETIME NULL
+);
+----add admin
+localhost/v1.11/db_records/add_admin.php
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+-- creating table with users cart
+CREATE TABLE cart_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES produkty(id)
+);
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+---categories table
+CREATE TABLE kategorie (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    matka INT DEFAULT 0,
+    nazwa VARCHAR(255) NOT NULL
+);
+
+--add categories
+INSERT INTO kategorie (id, matka, nazwa)
+VALUES
+(1, 0, 'Elektronika'),
+(2, 1, 'Tablety'),
+(3, 1, 'Telefony'),
+(7, 3, 'Smartfony'),
+(8, 1, 'Laptopy'),
+(9, 8, 'Gamingowe'),
+(10, 8, 'Ultrabooki'),
+(11, 2, 'Android'),
+(12, 2, 'iPad'),
+(13, 3, 'Klasyczne'),
+(14, 1, 'Telewizory'),
+(15, 14, 'Smart TV'),
+(16, 14, 'Tradycyjne TV'),
+(17, 15, 'OLED'),
+(18, 15, 'LCD'),
+(19, 1, 'Smartwatche'),
+(20, 19, 'Android'),
+(21, 19, 'Apple'),
+(22, 19, 'Sportowe'),
+(23, 1, 'Fotografia'),
+(24, 23, 'Aparaty'),
+(25, 24, 'Obiektywy'),
+(26, 3, 'Akcesoria'),
+(27, 26, 'Etui'),
+(28, 26, 'Szkła hartowane'),
+(29, 26, 'Folie'),
+(30, 8, 'Biznesowe'),
+(31, 1, 'Inne'),
+(32, 0, 'Dom i ogród'),
+(33, 32, 'Elektronarzędzia'),
+(34, 32, 'Oświetlenie'),
+(35, 0, 'Biuro i firma'),
+(36, 35, 'Meble biurowe'),
+(37, 35, 'Monitoring'),
+(38, 36, 'Biurka'),
+(39, 36, 'Krzesła'),
+(40, 0, 'Uroda i zdrowie'),
+(41, 40, 'Perfumy'),
+(42, 40, 'Zdrowie'),
+(43, 40, 'Dla mężczyzn'),
+(44, 0, 'Zabawki i dziecko'),
+(45, 44, 'Zabawki'),
+(46, 44, 'Gry'),
+(47, 46, 'Klocki'),
+(48, 0, 'Supermarket'),
+(49, 48, 'Artykuły Spożywcze'),
+(50, 48, 'Gadżety');
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+-- prodcuts table
+CREATE TABLE produkty (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tytul VARCHAR(255) NOT NULL,
+    opis TEXT,
+    data_utworzenia DATETIME NOT NULL,
+    data_modyfikacji DATETIME NOT NULL,
+    data_wygasniecia DATE,
+    cena_netto DECIMAL(10,2) NOT NULL,
+    vat DECIMAL(5,2) NOT NULL,
+    ilosc INT NOT NULL DEFAULT 0,
+    dostepnosc ENUM('dostepny', 'niedostepny', 'oczekujacy') NOT NULL DEFAULT 'dostepny',
+    kategoria_id INT,
+    gabaryt ENUM('maly', 'sredni', 'duzy') NOT NULL,
+    zdjecie VARCHAR(255),
+    FOREIGN KEY (kategoria_id) REFERENCES kategorie(id) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+----------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------
+----orders table
+CREATE TABLE orders (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    address TEXT NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    created_at DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+----------------------------------------------------------------------
+
+
+----------------------------------------------------------------------
+----order_item table
+CREATE TABLE order_items (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    price_net DECIMAL(10,2) NOT NULL,
+    vat DECIMAL(5,2) NOT NULL,
+    tytul VARCHAR(255) NOT NULL,
+    zdjecie VARCHAR(255);
+    FOREIGN KEY (order_id) REFERENCES orders(id),
+    FOREIGN KEY (product_id) REFERENCES produkty(id)
+
+);
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+--- insert new products into categories
+INSERT INTO produkty (tytul, opis, data_utworzenia, data_modyfikacji, data_wygasniecia, cena_netto, vat, ilosc, dostepnosc, kategoria_id, gabaryt, zdjecie) 
+VALUES 
+('iPhone 14 Pro', 'Smartfon Apple z 6.1-calowym ekranem Super Retina XDR i procesorem A16 Bionic.', NOW(), NOW(), '2025-12-31', 1200.00, 23.00, 50, 'dostepny', 7, 'sredni', 'https://image.ceneostatic.pl/data/products/138536499/i-apple-iphone-14-pro-128gb-gwiezdna-czern.jpg'),
+
+('MacBook Air M2', 'Lekki laptop Apple z procesorem M2 i ekranem Retina 13.6 cala.', NOW(), NOW(), '2026-01-15', 3500.00, 23.00, 20, 'dostepny', 8, 'duzy', 'https://lantre.pl/media/catalog/product/cache/0f7431f5367b37c067ffd8dcd36cc722/a/p/apple-macbook-air-13-6-m2-8-core-cpu-8-core-gpu-8gb-ram-256gb-ssd-zasilacz-30w-polnoc-midnight_1_6.jpg'),
+
+('Sony Bravia XR-55A95K', 'Telewizor Sony 55 cali OLED z procesorem Cognitive Processor XR.', NOW(), NOW(), NULL, 2500.00, 23.00, 10, 'dostepny', 14, 'duzy', 'https://images.scentre.pl/images/55_A95K_titan_blk_slate_blk_back_position_style_cw.jpg'),
+
+('Apple iPad Pro 12.9', 'Tablet Apple z ekranem Liquid Retina XDR i procesorem M2.', NOW(), NOW(), '2025-06-30', 800.00, 23.00, 30, 'dostepny', 2, 'sredni', 'https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/refurb-ipad-pro-13inch-6th-gen-wifi-spacegray-202409?wid=1144&hei=1144&fmt=jpeg&qlt=90&.v=1721694129629'),
+
+('PlayStation 5', 'Konsola nowej generacji Sony z obsługą 4K i technologii ray tracing.', NOW(), NOW(), NULL, 2000.00, 23.00, 15, 'dostepny', 31, 'sredni', 'https://images.scentre.pl/images/_big_multi_00003/Konsola-SONY-PlayStation-5-Slim-skos.jpg'),
+
+('Samsung Galaxy Watch 6', 'Smartwatch Samsung z ekranem Super AMOLED i monitorowaniem zdrowia.', NOW(), NOW(), '2025-03-15', 600.00, 23.00, 40, 'dostepny', 20, 'maly', 'https://www.irisimo.pl/files/product/56235/SAMSUNG-Galaxy-Watch-6-40mm-Grafite-SM-R930NZKAEUE.gif'),
+
+('Bose SoundLink Revolve+', 'Przenośny głośnik Bluetooth z dźwiękiem 360°.', NOW(), NOW(), NULL, 300.00, 23.00, 60, 'dostepny', 31, 'maly', 'https://a.allegroimg.com/s512/00ceb3/a9c90149481180aeecd709511b44/ORYGINALNY-GLOSNIK-PRZENOSNY-BOSE-SOUNDLINK-REVOLVE-II-BLUETOOTH-CZARNY-EAN-GTIN-5905255717329'),
+
+('Canon EOS R8', 'Pełnoklatkowy aparat fotograficzny z matrycą CMOS 24.2 MP.', NOW(), NOW(), '2025-09-30', 4500.00, 23.00, 5, 'dostepny', 24, 'duzy', 'https://i1.adis.ws/i/canon/eos-r8-frt_gallery-module_01_d999d79152fc4c5691e8789570fe1e1b?$hotspot-dt-jpg$'),
+
+('Samsung Galaxy S23 Ultra', 'Flagowy smartfon Samsung z ekranem AMOLED 6.8 cala i procesorem Snapdragon 8 Gen 2.', NOW(), NOW(), '2025-12-31', 4500.00, 23.00, 30, 'dostepny', 7, 'sredni', 'https://image.ceneostatic.pl/data/products/147752602/i-samsung-galaxy-s23-ultra-5g-sm-s918-8-256gb-zielony.jpg'),
+
+('Dell XPS 13 Plus', 'Lekki ultrabook z ekranem OLED 13.4 cala i procesorem Intel Core i7 12. generacji.', NOW(), NOW(), '2025-12-31', 6000.00, 23.00, 10, 'dostepny', 10, 'sredni', 'https://laptopfactory.pl/environment/cache/images/800_800_productGfx_34745/Dell-XPS-13-9320-z-i5-1240P-i-matryca-FHD--oferuje-doskonala-wydajnosc%2C-styl-i-jakosc-obrazu-w-ultralekkim%2C-nowoczesnym-designie.webp'),
+
+('Sony A7 IV', 'Pełnoklatkowy aparat bezlusterkowy Sony z matrycą 33 MP i zaawansowanym autofokusem.', NOW(), NOW(), '2025-12-31', 12000.00, 23.00, 15, 'dostepny', 24, 'duzy', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/38/3868618/Aparat-SONY-Alpha-ILCE-7M4KB-Czarny-front1.jpg'),
+
+('Samsung Neo QLED 8K QN900B', 'Telewizor 75 cali z rozdzielczością 8K i technologią Neo QLED.', NOW(), NOW(), '2026-12-31', 20000.00, 23.00, 5, 'dostepny', 14, 'duzy', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/56/5613416/Telewizor-SAMSUNG-55QN700C-skos-lewy.jpg'),
+
+('Apple Watch Series 9', 'Smartwatch Apple z funkcją monitorowania zdrowia i ekranem Retina Always-On.', NOW(), NOW(), '2025-12-31', 1500.00, 23.00, 25, 'dostepny', 21, 'maly', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/69/6961532/Apple-Watch-10-42mm-Czarny-1.jpg'),
+
+('Canon RF 50mm f/1.2L', 'Profesjonalny obiektyw Canon RF o ogniskowej 50mm i jasności f/1.2.', NOW(), NOW(), '2025-06-30', 10000.00, 23.00, 8, 'dostepny', 24, 'maly', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/21/2101673/Obiektyw-CANON-RF-50-mm-F-1.2L-USM-front-1.jpg'),
+
+('Microsoft Surface Laptop 5', 'Laptop premium z ekranem dotykowym 13.5 cala i procesorem Intel Evo.', NOW(), NOW(), '2026-01-31', 5000.00, 23.00, 20, 'dostepny', 30, 'sredni', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/65/6582324/Laptop-MICROSOFT-Surface-Laptop-Copilot-01.jpg'),
+
+('Bose Noise Cancelling Headphones 700', 'Słuchawki z aktywną redukcją szumów i 20 godzinami pracy na baterii.', NOW(), NOW(), '2025-09-30', 1200.00, 23.00, 50, 'dostepny', 31, 'maly', 'https://f00.esfr.pl/foto/3/130618024577/c77621968234289b708434d57207400e/bose-quietcomfort-ultra-nauszne-bluetooth-5-3-czarny,130618024577_5.webp'),
+
+('Samsung Galaxy Tab S9+', 'Tablet z ekranem AMOLED 12.4 cala i obsługą rysika S Pen.', NOW(), NOW(), '2025-06-30', 4000.00, 23.00, 2, 'dostepny', 3, 'sredni', 'https://image.ceneostatic.pl/data/products/155851548/i-samsung-galaxy-tab-s9-12-4-12-256gb-wifi-bezowy-sm-x810nzeaeub.jpg'),
+
+('Xiaomi Mi Band 7', 'Smartband z ekranem AMOLED i monitorowaniem aktywności fizycznej.', NOW(), NOW(), '2025-12-31', 150.00, 23.00, 100, 'dostepny', 20, 'maly', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/68/6818522/Smartband-XIAOMI-Smart-Band-9-Czarny-front-skos.jpg'),
+
+('Samsung Galaxy Tab S8 Ultra', 'Tablet z ekranem 14.6 cala Super AMOLED i procesorem Snapdragon 8 Gen 1.', NOW(), NOW(), '2025-12-31', 4500.00, 23.00, 20, 'dostepny', 2, 'duzy', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/68/6883462/Tablet-SAMSUNG-Galaxy-Tab-S10-Ultra-Wi-Fi-Grafitowy-przodtyl__1.jpg'),
+
+('Apple iPad Air 5', 'Tablet z ekranem Liquid Retina i procesorem M1.', NOW(), NOW(), '2025-12-31', 3000.00, 23.00, 30, 'dostepny', 2, 'sredni', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRxFiXy8_pWtWSSeJ1yK-qIACjJ_bxEqJUowF57UAu7O5t5qyi49K07nU8G0LiWIcXKnOePPH7SL0ZXWIKQMMj0gqgBNSNLe5TzJ1EO9ZjDhl5IHkLgj_uNgm7XO01VQf1d8zhEP_pXw5M&usqp=CAc'),
+
+('OnePlus 11', 'Smartfon z ekranem AMOLED 6.7 cala i procesorem Snapdragon 8 Gen 2.', NOW(), NOW(), '2025-12-31', 3500.00, 23.00, 40, 'dostepny', 7, 'sredni', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTeaicD2sUHM-lQ03v_OA2VRQgdqaytRlV8bnT-vQapOSnj2WYPR5w9tgEGtMdrzPDPQCloAKMXLusJ_JWzUKqhHyXlrd7vhyH4E64Gf2rJsDNPaJuZtzB6&usqp=CAc'),
+
+('Nokia 3310 (2023)', 'Klasyczny telefon z kolorowym ekranem i długim czasem pracy na baterii.', NOW(), NOW(), '2026-01-15', 200.00, 23.00, 50, 'dostepny', 13, 'maly', 'https://m.media-amazon.com/images/I/61enALLWKSL._AC_SL1500_.jpg'),
+
+('Asus ROG Strix G16', 'Laptop gamingowy z ekranem 16 cali 240Hz i procesorem Intel Core i9.', NOW(), NOW(), '2025-12-31', 8500.00, 23.00, 15, 'dostepny', 9, 'duzy', 'https://f00.esfr.pl/foto/6/153098125617/d6ecf0887a21f337af0c3f0cb2abdf1f/asus-laptop-asus-rog-s-i7-16gb-1tb-4070-w11,153098125617_5.webp'),
+
+('HP Spectre x360 14', 'Ultrabook z ekranem dotykowym OLED i procesorem Intel Core i7.', NOW(), NOW(), '2025-12-31', 7000.00, 23.00, 10, 'dostepny', 10, 'sredni', 'https://f00.esfr.pl/foto/8/111056643713/240049f0cfcfc407aecc1e810aa12a7a/hp-laptop-spectre-x360-13-5-i7-16g-1tb-w11p,111056643713_5.webp'),
+
+('LG OLED55C3', 'Telewizor OLED 55 cali z procesorem Alpha9 Gen6.', NOW(), NOW(), '2026-12-31', 6000.00, 23.00, 20, 'dostepny', 14, 'duzy', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/65/6500282/Telewizor-LG-C35LA-skos-1.jpg'),
+
+('Apple Watch Ultra', 'Wytrzymały smartwatch dla aktywnych z funkcjami sportowymi i ekranem Retina.', NOW(), NOW(), '2025-12-31', 4500.00, 23.00, 25, 'dostepny', 21, 'maly', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/69/6961560/Apple-Watch-Ultra-2-49mm-Opaska-sportowa-1.jpg'),
+
+('Nikon Z9', 'Profesjonalny bezlusterkowiec z matrycą 45.7 MP i wideo 8K.', NOW(), NOW(), '2025-12-31', 25000.00, 23.00, 8, 'dostepny', 24, 'duzy', 'https://image.ceneostatic.pl/data/products/117561350/i-nikon-z-9-body.jpg'),
+
+('Sigma 35mm f/1.4 DG DN', 'Obiektyw szerokokątny z mocowaniem Sony E.', NOW(), NOW(), '2025-06-30', 4000.00, 23.00, 15, 'dostepny', 25, 'maly', 'https://fotoforma.pl/userdata/public/gfx/90995/obiektyw-sigma-35mm-f1.4-dg-dn-art-sony-e_1.jpg'),
+
+('Sony WH-1000XM5', 'Słuchawki bezprzewodowe z redukcją szumów i dźwiękiem Hi-Res.', NOW(), NOW(), '2025-12-31', 1200.00, 23.00, 35, 'dostepny', 31, 'maly', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcR2lP6onnZB21HxZTNfY9v6apwUE9rAZOxzVKBOkI4IuNtCLdqDm6xqD7Z7wopIMQezm165eFPc2IGanzwCRQYxHdWf0y8IkjugRP7Cgd5yIWtqJnjWdyS_WlUo64qp7LsSeoSNts4&usqp=CAc'),
+
+('Philips 32PHS5527', 'Telewizor LED 32 cale z rozdzielczością HD.', NOW(), NOW(), '2025-06-30', 900.00, 23.00, 40, 'dostepny', 14, 'sredni', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQyuP-5WMVabrRz16L9H6GjQobJhtdiEiShc82e1RownlTxaiWfjbQUVlq8qgAicTJSfuymPOKJzN398cwRgglGbHELR5w7CrzozT6T-8LGT02sMsgVmQosV8E6Mt87YA&usqp=CAc'),
+
+('Garmin Venu 2 Plus', 'Smartwatch z GPS, monitorowaniem zdrowia i ekranem AMOLED.', NOW(), NOW(), '2025-12-31', 1700.00, 23.00, 30, 'dostepny', 20, 'maly', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTIGOmSbMFty0R-Kfk6QLqs86kUgPCHvDNncyIRPGmvsACJUU4RBshjvfNHJFuEgz-WdNmbk8xyFWP4bqZ-4lJzLTY-BGzQOt54D6VqKx8moBppc2iJxNeSB07TDMxaDQK3OY_T7W_4LrQ&usqp=CAc'),
+
+('Google Pixel 8 Pro', 'Smartfon z aparatem 50 MP, ekranem LTPO OLED 6.7 cala i Android 14.', NOW(), NOW(), '2025-12-31', 4000.00, 23.00, 25, 'dostepny', 7, 'sredni', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQ3EJG1IoIBLoMd2P6tQknYJ1nfQjUSzepIP7pvOP3QzU-I9J6Bp5Mb54u0RJS4WHLCYIQP_kmArvqlWL2QUuNgZrK1x8UYT1YCTbRgQxpJG-lzlHai3ssjqjEdviVuDRt7p2Gk8Tcosg&usqp=CAc'),
+
+('MSI Katana GF66', 'Laptop gamingowy z ekranem 15.6 cala i kartą graficzną RTX 4060.', NOW(), NOW(), '2025-12-31', 6000.00, 23.00, 18, 'dostepny', 9, 'duzy', 'https://f00.esfr.pl/foto/9/134010638433/7c03b84cdd9910ebf4040cda7a4e0990/msi-laptop-katana-17-b13vgk-i7-16gb-1tb-4070,134010638433_5.webp'),
+
+('Lenovo Tab P11 Pro', 'Tablet z ekranem OLED 11.5 cala i procesorem Snapdragon 730G.', NOW(), NOW(), '2025-12-31', 2000.00, 23.00, 50, 'dostepny', 2, 'sredni', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTmyDpOkdwlRKKjOhRLq5q_zQpmT5yV0bXZbYBxLMvo5Igt_rwmDHWeSqG535g5_mKMu2MMXIByWrQORVn6sA6jzIa6KzVsBSv3ie6q-Y62vp7GhlEIxFc9_jqkSuEMtpRjwhTODH52LQ&usqp=CAc'),
+
+('Sony A80L', 'Telewizor OLED 65 cali z technologią XR OLED Contrast Pro.', NOW(), NOW(), '2026-01-15', 7000.00, 23.00, 10, 'dostepny', 14, 'duzy', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcSjg1sVKmteek9hx1T6uXzYbm78494O1LUEqXrZsy-YHzZQSztrWd9lx5HF8jVBfgVJxYY3oIxxLrp5fRRI5U5zDLm3AQTulF5P6pTYbABeNiSekFJWDJbO8pZEGvPkEBiMUVHz6TmtHCs&usqp=CAc'),
+
+('Apple Watch Series 9', 'Nowoczesny smartwatch z ulepszonym czipem S9 i funkcją monitorowania zdrowia.', NOW(), NOW(), '2025-12-31', 2300.00, 23.00, 30, 'dostepny', 21, 'maly', 'https://prod-api.mediaexpert.pl/api/images/gallery/thumbnails/images/69/6961532/Apple-Watch-10-42mm-Czarny-1.jpg'),
+
+('Canon EOS R50', 'Bezkompromisowy aparat z matrycą APS-C i funkcją wideo 4K.', NOW(), NOW(), '2025-12-31', 3500.00, 23.00, 20, 'dostepny', 24, 'duzy', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQ60Searmpllse48Ogk7nJujfzxcz-jk6tbk0vN7Pe4I07_KGmJicLnssZXtu_zi3ul8LJnonMYecBZ-pWjmR3ShFgro1YqVgqJVb-wI-KbyTUtGzi0W5GkhmyujlAX0g&usqp=CAc'),
+
+('Tamron 28-75mm f/2.8', 'Zoom standardowy z mocowaniem Sony E i stabilizacją obrazu.', NOW(), NOW(), '2025-06-30', 3200.00, 23.00, 15, 'dostepny', 25, 'maly', 'https://image.ceneostatic.pl/data/products/120589255/i-tamron-28-75mm-f-2-8-di-iii-vxd-g2-sony-e.jpg'),
+
+-- Smartfony (7)
+('Samsung Galaxy S24 Ultra', 'Flagowy smartfon Samsung z ekranem 6.8" i aparatem 200MP', NOW(), NOW(), '2025-12-31', 5999, 23.00, 30, 'dostepny', 7, 'sredni', 'https://en.letsgodigital.org/uploads/2020/01/samsung-s20-ultra.jpg'),
+('iPhone 15 Pro', 'Smartfon Apple z procesorem A17 Pro i kamerą 48MP', NOW(), NOW(), '2025-12-31', 5499, 23.00, 25, 'dostepny', 7, 'sredni', 'https://cdn.mos.cms.futurecdn.net/gjYX6oW2TB2P7D3XodVe2D.jpg'),
+('Google Pixel 8 Pro', 'Smartfon Google z czystym Androidem i świetnym aparatem', NOW(), NOW(), '2025-12-31', 4299, 23.00, 20, 'dostepny', 7, 'sredni', 'https://specificationsplus.com/wp-content/uploads/2022/05/Xiaomi-14-Pro-Specifications-Plus.jpg'),
+('Xiaomi 14 Pro', 'Flagowy smartfon Xiaomi z procesorem Snapdragon 8 Gen 3', NOW(), NOW(), '2025-12-31', 4799, 23.00, 35, 'dostepny', 7, 'sredni', 'https://specificationsplus.com/wp-content/uploads/2022/05/Xiaomi-14-Pro-Specifications-Plus.jpg'),
+
+-- Telefony klasyczne (13)
+('Nokia 3310', 'Kultowy telefon z długim czasem pracy baterii', NOW(), NOW(), NULL, 199, 23.00, 50, 'dostepny', 13, 'maly', 'https://i.redd.it/ua0me50qbxk51.jpg'),
+('Nokia 225', 'Prosty telefon z kolorowym ekranem', NOW(), NOW(), NULL, 149, 23.00, 40, 'dostepny', 13, 'maly', 'https://images.ctfassets.net/wcfotm6rrl7u/37JvmpUszGtSrNzzw2pOhr/7861d3202e7cfc7faf6af2479ac9e640/nokia_225_4G-BUY-mobile.png'),
+('myPhone Classic+', 'Telefon dla seniorów z dużymi przyciskami', NOW(), NOW(), NULL, 129, 23.00, 30, 'dostepny', 13, 'maly', 'https://images.ctfassets.net/wcfotm6rrl7u/37JvmpUszGtSrNzzw2pOhr/7861d3202e7cfc7faf6af2479ac9e640/nokia_225_4G-BUY-mobile.png'),
+('Maxcom MM139', 'Telefon z radiem FM i latarką', NOW(), NOW(), NULL, 89, 23.00, 45, 'dostepny', 13, 'maly', 'https://www.xiaomitotal.com/wp-content/uploads/2021/12/maxcom-mm139-24-vga-2g-blue.jpg'),
+
+-- Tablety Android (11)
+('Samsung Galaxy Tab S9 Ultra', 'Tablet z ekranem 14.6" i rysikiem S Pen', NOW(), NOW(), '2025-12-31', 4999, 23.00, 15, 'dostepny', 11, 'duzy', 'https://media.cnn.com/api/v1/images/stellar/prod/galaxy-tab-s8-ultra-lead.jpg?q=h_900,w_1601,x_0,y_0'),
+('Lenovo Tab P12 Pro', 'Tablet ze Snapdragon 870 i ekranem AMOLED', NOW(), NOW(), '2025-12-31', 2999, 23.00, 20, 'dostepny', 11, 'duzy', 'https://www.vopmart.com/media/magefan_blog/Xiaomi_Pad_6_Pro.jpg'),
+('Xiaomi Pad 6', 'Tablet z procesorem Snapdragon 870', NOW(), NOW(), '2025-12-31', 1699, 23.00, 25, 'dostepny', 11, 'sredni', 'https://www.vopmart.com/media/magefan_blog/Xiaomi_Pad_6_Pro.jpg'),
+('OPPO Pad Air', 'Lekki tablet z ekranem 2K', NOW(), NOW(), '2025-12-31', 999, 23.00, 30, 'dostepny', 11, 'sredni', 'https://www.zdnet.com/a/img/resize/16b2767d00f926428d55b56056575e0f7eb7cf31/2022/04/25/1c52a18d-58ed-467a-8425-68ca401d50ed/lenovo-tab-p12-pro-hero.jpg?width=770&height=578&fit=crop&auto=webp'),
+
+-- iPad (12)
+('iPad Pro 12.9 M2', 'iPad z procesorem M2 i ekranem mini-LED', NOW(), NOW(), '2025-12-31', 5499, 23.00, 20, 'dostepny', 12, 'duzy', 'https://product.hstatic.net/200000571041/product/apple-ipad-pro-space-gray-2up-221018_big.jpg.large_6fb14937a9c844c992baa2ccf0378c2e.jpg'),
+('iPad Air M1', 'iPad z procesorem M1 i Touch ID', NOW(), NOW(), '2025-12-31', 3299, 23.00, 25, 'dostepny', 12, 'sredni', 'https://product.hstatic.net/200000571041/product/apple-ipad-pro-space-gray-2up-221018_big.jpg.large_6fb14937a9c844c992baa2ccf0378c2e.jpg'),
+('iPad 10', 'iPad z ekranem Retina 10.9"', NOW(), NOW(), '2025-12-31', 2399, 23.00, 30, 'dostepny', 12, 'sredni', 'https://product.hstatic.net/200000571041/product/apple-ipad-pro-space-gray-2up-221018_big.jpg.large_6fb14937a9c844c992baa2ccf0378c2e.jpg'),
+('iPad mini 6', 'Kompaktowy iPad z ekranem 8.3"', NOW(), NOW(), '2025-12-31', 2799, 23.00, 25, 'dostepny', 12, 'maly', 'https://product.hstatic.net/200000571041/product/apple-ipad-pro-space-gray-2up-221018_big.jpg.large_6fb14937a9c844c992baa2ccf0378c2e.jpg'),
+
+-- Laptopy gamingowe (9)
+('MSI Raider GE78 HX', 'Laptop gamingowy z RTX 4090 i i9-13980HX', NOW(), NOW(), '2025-12-31', 19999, 23.00, 8, 'dostepny', 9, 'duzy', 'https://static.digitecgalaxus.ch/Files/4/1/5/8/0/2/6/8/10_StrixG_17_Grey_L.jpg'),
+('Lenovo Legion Pro 7', 'Laptop z RTX 4080 i AMD Ryzen 9', NOW(), NOW(), '2025-12-31', 15999, 23.00, 10, 'dostepny', 9, 'duzy', 'https://static.digitecgalaxus.ch/Files/4/1/5/8/0/2/6/8/10_StrixG_17_Grey_L.jpg'),
+('ASUS ROG Strix G17', 'Laptop gamingowy z RTX 4070 i Ryzen 7', NOW(), NOW(), '2025-12-31', 8999, 23.00, 15, 'dostepny', 9, 'duzy', 'https://s.yimg.com/ny/api/res/1.2/zuruARp_D.aVQB7AckBTuQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTU0MA--/https://s.yimg.com/os/creatr-uploaded-images/2024-12/f1f85a50-c6da-11ef-9fbd-c75447c4cbdf'),
+('Acer Predator Helios 300', 'Laptop z RTX 4060 i i7-13700H', NOW(), NOW(), '2025-12-31', 6999, 23.00, 20, 'dostepny', 9, 'duzy', 'https://s.yimg.com/ny/api/res/1.2/zuruARp_D.aVQB7AckBTuQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTk2MDtoPTU0MA--/https://s.yimg.com/os/creatr-uploaded-images/2024-12/f1f85a50-c6da-11ef-9fbd-c75447c4cbdf'),
+
+-- Ultrabooki (10)
+('Dell XPS 13 Plus', 'Ultracienki laptop z Intel Core i7', NOW(), NOW(), '2025-12-31', 6999, 23.00, 15, 'dostepny', 10, 'sredni', 'https://www.notebookcheck.info/uploads/tx_nbc2/Dell_XPS13Plus_2022FHD_50.jpg'),
+('LG Gram 17', 'Lekki laptop z ekranem 17"', NOW(), NOW(), '2025-12-31', 5999, 23.00, 12, 'dostepny', 10, 'duzy', 'https://www.notebookcheck.nl/uploads/tx_nbc2/zenbook_s13_oled_01.jpg'),
+('ASUS ZenBook S13 OLED', 'Ultrabook z ekranem OLED', NOW(), NOW(), '2025-12-31', 5499, 23.00, 18, 'dostepny', 10, 'sredni', 'https://www.notebookcheck.nl/uploads/tx_nbc2/zenbook_s13_oled_01.jpg'),
+('Huawei MateBook X Pro', 'Ultrabook z dotykowym ekranem', NOW(), NOW(), '2025-12-31', 6499, 23.00, 14, 'dostepny', 10, 'sredni', 'https://www.notebookcheck.nl/uploads/tx_nbc2/zenbook_s13_oled_01.jpg'),
+
+-- Laptopy biznesowe (30)
+('ThinkPad X1 Carbon Gen 10', 'Laptop biznesowy z Intel vPro', NOW(), NOW(), '2025-12-31', 7999, 23.00, 20, 'dostepny', 30, 'sredni', 'https://www.notebookcheck.info/uploads/tx_nbc2/Dell_XPS13Plus_2022FHD_50.jpg'),
+('HP EliteBook 840 G9', 'Laptop z zabezpieczeniami HP Sure View', NOW(), NOW(), '2025-12-31', 5999, 23.00, 25, 'dostepny', 30, 'sredni', 'https://images.anandtech.com/doci/13681/lg-gram-17-1.jpg'),
+('Dell Latitude 7430', 'Laptop biznesowy z 5G', NOW(), NOW(), '2025-12-31', 6499, 23.00, 22, 'dostepny', 30, 'sredni', 'https://www.notebookcheck.info/uploads/tx_nbc2/Dell_XPS13Plus_2022FHD_50.jpg'),
+('ASUS ExpertBook B9', 'Ultralekki laptop biznesowy', NOW(), NOW(), '2025-12-31', 6999, 23.00, 18, 'dostepny', 30, 'sredni', 'https://images.anandtech.com/doci/13681/lg-gram-17-1.jpg'),
+
+-- Smart TV (15)
+('Samsung QN900C', 'Telewizor 8K Neo QLED 85"', NOW(), NOW(), '2025-12-31', 25999, 23.00, 5, 'dostepny', 15, 'duzy', 'https://www.bhphotovideo.com/images/images1500x1500/samsung_qn85qn900cfxza_qn900c_85_8k_hdr_1742760.jpg'),
+('LG OLED G3', 'Telewizor OLED evo 77"', NOW(), NOW(), '2025-12-31', 19999, 23.00, 8, 'dostepny', 15, 'duzy', 'https://www.bhphotovideo.com/images/images1500x1500/samsung_qn85qn900cfxza_qn900c_85_8k_hdr_1742760.jpg'),
+('Sony XR-77A80L', 'Telewizor OLED 77" z Google TV', NOW(), NOW(), '2025-12-31', 18999, 23.00, 6, 'dostepny', 15, 'duzy', 'https://www.lg.com/us/images/tvs/md08003937/gallery/DZ02.jpg'),
+('Philips 75PUS8808', 'Telewizor LED 75" z Ambilight', NOW(), NOW(), '2025-12-31', 7999, 23.00, 10, 'dostepny', 15, 'duzy', 'https://image.son-video.com/images/article/philips/PHIL75PUS8808/75pus8808_64707493638f5_600.jpg'),
+
+-- OLED TV (17)
+('LG OLED C3', 'Telewizor OLED 65" z procesorem α9', NOW(), NOW(), '2025-12-31', 9999, 23.00, 12, 'dostepny', 17, 'duzy', 'https://www.bhphotovideo.com/images/images1500x1500/samsung_qn85qn900cfxza_qn900c_85_8k_hdr_1742760.jpg'),
+('Sony A95L', 'Telewizor OLED 65" QD-OLED', NOW(), NOW(), '2025-12-31', 14999, 23.00, 8, 'dostepny', 17, 'duzy', 'https://www.lg.com/us/images/tvs/md08003937/gallery/DZ02.jpg'),
+('Philips 65OLED808', 'Telewizor OLED z 4-stronnym Ambilight', NOW(), NOW(), '2025-12-31', 8999, 23.00, 15, 'dostepny', 17, 'duzy', 'https://www.lg.com/us/images/tvs/md08003937/gallery/DZ02.jpg'),
+('Panasonic TX-65LZ2000E', 'Telewizor OLED Master HDR', NOW(), NOW(), '2025-12-31', 11999, 23.00, 7, 'dostepny', 17, 'duzy', 'https://image.son-video.com/images/article/philips/PHIL75PUS8808/75pus8808_64707493638f5_600.jpg'),
+
+-- LCD TV (18)
+('Samsung QN85C', 'Telewizor Neo QLED 65"', NOW(), NOW(), '2025-12-31', 7999, 23.00, 15, 'dostepny', 18, 'duzy', 'https://www.oled-info.com/sites/oled/files/2023-03/Sony-A95L.jpg'),
+('TCL 65C745', 'Telewizor QLED 4K', NOW(), NOW(), '2025-12-31', 4999, 23.00, 20, 'dostepny', 18, 'duzy', 'https://image.son-video.com/images/article/philips/PHIL75PUS8808/75pus8808_64707493638f5_600.jpg'),
+('Hisense 65U8KQ', 'Telewizor Mini LED', NOW(), NOW(), '2025-12-31', 5999, 23.00, 18, 'dostepny', 18, 'duzy', 'https://www.lg.com/us/images/tvs/md08003937/gallery/DZ02.jpg'),
+
+-- Smartwatche Android (20)
+('Samsung Galaxy Watch 6 Pro', 'Smartwatch z Wear OS i NFC', NOW(), NOW(), '2025-12-31', 1999, 23.00, 30, 'dostepny', 20, 'maly', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQG0q5sBG6N-vrHUhLD0Tq4wx_SyhxzPJEWvJ9rVtkDKNE8xBWueFa0o8FW0Q2SN9bYRMu2Wzz143rLz5D5nad0cVsz19QOW6ofPh7GORIgFFEnRHFT2rTAM2c7zRZZBjyHME_PLuK4EQ&usqp=CAc'),
+('Google Pixel Watch 2', 'Smartwatch z Fitbit', NOW(), NOW(), '2025-12-31', 1799, 23.00, 25, 'dostepny', 20, 'maly', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRVVyy7aE4BTwQNZKL_VwkHVdGq2Nfd8Y-HZ8W6-QZepV1Igj0AbOw3t9k_grf_s2ziZBmKNUKR5YkLkha6yr3hFal-WcO3kvQvjPV_-l4o_7Ei0L9IXc-HJrzR6WeP0e-CpmXnEDxRUmg&usqp=CAc'),
+('Huawei Watch GT 4', 'Smartwatch z długim czasem pracy', NOW(), NOW(), '2025-12-31', 1299, 23.00, 35, 'dostepny', 20, 'maly', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcR2V27phv8Y1POLp5uGfxf65US0N7xJwZ7Ui5u2mqlsL7BEN_GtG7DyAbdJVI0x58JY4p_v-GrI_1m16CCuLeNWtYCLbjAsopPpIfZcD7jFhX49qhEUlJeXtN2kc5D-x-padcRD1x2OEA&usqp=CAc'),
+('Xiaomi Watch S1 Pro', 'Smartwatch z safirowym szkłem', NOW(), NOW(), '2025-12-31', 999, 23.00, 40, 'dostepny', 20, 'maly', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQnYYcQzNkInuxIpNMbR4nqoxiCoxgKYNVXRo8s5gsB1wz3ZUpWhNzg-nCPR5ST1F9OCGAsVseImJ2zJo5g8xHVY80xuGgil4_uq97bnurfWcXTabD9igtPiITxfkFOwelscMp9-gFS80c&usqp=CAc'),
+
+-- Apple Watch (21)
+('Apple Watch Ultra 2', 'Smartwatch z tytanową kopertą', NOW(), NOW(), '2025-12-31', 3999, 23.00, 20, 'dostepny', 21, 'maly', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcQ-ZehIhpyaYPBbnOz-pctaLv4Mfmf4zpIDvstikxazOoTtnONs7GPH54SPteWVUdt0-JlE0sbpMRKy5CM_rVtHlvmKjbovXei8qiQ5Q6GewnyS92_34b7VSePB21L4u6PbXAHflLDWZg&usqp=CAc'),
+('Apple Watch Series 9', 'Smartwatch z czipem S9', NOW(), NOW(), '2025-12-31', 2499, 23.00, 30, 'dostepny', 21, 'maly', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTAlGmx7FdNHZi6zkDPZspWn6G30Bp2Ir5oYdOmBD1RRvqhiPi8l2urdgj120gPMytyvk8w9FvEEX_eHOAlfts37cNAYRG9IFZIcgY0C1NY4ZQ5f-dZX9l0HOqNYMocQNwjklDcgj5R7SQ&usqp=CAc'),
+('Apple Watch SE 2', 'Przystępny cenowo smartwatch', NOW(), NOW(), '2025-12-31', 1499, 23.00, 40, 'dostepny', 21, 'maly', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSvu7LOiNHkncWepD1Vwyu0VCClOttF0ykLFP4V3cJ74vD4-eYafqJjfvek1jYHWDFDrQu7UujWIFYZw6EZXSxJDY1GFLX1e3zJJZyofTCsyJ3g_K7yzUJEge7WPecwfpbGNJs8Wn7rWQ&usqp=CAc'),
+('Apple Watch Nike', 'Sportowa wersja z paskiem Nike', NOW(), NOW(), '2025-12-31', 2299, 23.00, 25, 'dostepny', 21, 'maly', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQK4CrACw2YsLD7Nbg-yYwfg2UI3yXao5jyJ8ioL3HX_lg17c5xkOqylUaenO1gQVPkqMMeTQJ2QfPn7m6ipCWz9A7YhOA0a1ggiof_-LYz_YWnY9FXFJPiNGForhjuJdpp5p1e4Y9qeoE&usqp=CAc'),
+
+-- Sportowe smartwatche (22)
+('Garmin Fenix 7X Pro', 'Zegarek multisportowy z mapami', NOW(), NOW(), '2025-12-31', 3999, 23.00, 15, 'dostepny', 22, 'maly', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT3HjknlQfGrSFVzLLEYrBcNDCWIjstZLFECdK5OelwHmQNPeak4bpfmelf1MGgsWit0iLjKSM3GaQ5pnRrTplrt9vXs5DtC0nUyBBvhzworkuGc9_lnemN6TRB5WQJCEFXOX9iDv7cdA&usqp=CAc'),
+('Polar Vantage V3', 'Zaawansowany zegarek dla sportowców', NOW(), NOW(), '2025-12-31', 2999, 23.00, 20, 'dostepny', 22, 'maly', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcSnGdmX_3qwTPky5CtECmS5qZ9bKigPEm5UzET80V2dtdi0c5nkenkPQiqIwU08XaprRLIuPYix5LCRi8jMrPAlKYerAnoq01qJd8rv-hdF3KlRl3erjZ0iQRPw5gcr8oHrh4KeWDnL_gw&usqp=CAc'),
+('Suunto 9 Peak Pro', 'Wytrzymały zegarek sportowy', NOW(), NOW(), '2025-12-31', 2499, 23.00, 25, 'dostepny', 22, 'maly', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQG0q5sBG6N-vrHUhLD0Tq4wx_SyhxzPJEWvJ9rVtkDKNE8xBWueFa0o8FW0Q2SN9bYRMu2Wzz143rLz5D5nad0cVsz19QOW6ofPh7GORIgFFEnRHFT2rTAM2c7zRZZBjyHME_PLuK4EQ&usqp=CAc'),
+('Coros Vertix 2', 'Zegarek z długim czasem pracy baterii', NOW(), NOW(), '2025-12-31', 2799, 23.00, 18, 'dostepny', 22, 'maly', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQh4pZTXFbWYDPdFsxkeihbW5YCGi2piSMdl3Ka5vyw7ughHZ_ZIZoL4flisQegbMZO7u-xh15INcIEH-aMIpnmiUGFVOnc5wHCchXZU4ZQmLWMO13CKrZ1Gw'),
+
+-- Aparaty fotograficzne (24)
+('Sony A7 IV', 'Bezlusterkowiec pełnoklatkowy', NOW(), NOW(), '2025-12-31', 11999, 23.00, 10, 'dostepny', 24, 'sredni', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRf2YXqlpKrzHr1g3C6aAkliUNwe5eYuKX8QqXDbm1gRYQ5Xd24uMSukOat4Wgf03gJP2GtE6OALbivGlXJmyieK75VSve2AW6A4WUCSAfH0ZXZblxnk-CqW9Cc6GEPOaW3J4a015IB3A&usqp=CAc'),
+('Canon EOS R6 Mark II', 'Aparat mirrorless do foto i wideo', NOW(), NOW(), '2025-12-31', 12999, 23.00, 8, 'dostepny', 24, 'sredni', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRfl50yElUQ0cK67036epeOVH5gO_0hij7FsxcktZ2Gjz-pD6HpY5LbG3DTucGnjs_bf2dSggquIdNZFfDHDeEItWOwvaFqjMPpRcGqowfSkjcHUrICBR3BZksRCt1A&usqp=CAc'),
+('Nikon Z6 II', 'Wszechstronny bezlusterkowiec', NOW(), NOW(), '2025-12-31', 9999, 23.00, 12, 'dostepny', 24, 'sredni', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRcmhzty39wO21wKcsvnEud49ns3qUKG8XmEJq3LPqAbiYatRqbPnOFjc6CvQxJNYApYeDoTaE5wt1TU_AC385l9nk3as7owLFHgk-rZxKDIPoBqQtr4LpBJSpArboZujPGkWaplEPJ5nE&usqp=CAc'),
+('Fujifilm X-T5', 'Bezlusterkowiec z matrycą APS-C', NOW(), NOW(), '2025-12-31', 8999, 23.00, 15, 'dostepny', 24, 'sredni', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQxISm8JpqFX-bRBWkV8XKtuRIIinH-tFgbhrvOfF56-bsj_hAxsXAfH7Nxc5dApueca3bwTkUkvlaOuNEk6Fry_QrSKcAl48oCPhNYbTws_hQwak3ER8NWKyGTRPF3WB6gCCrSWLmkMw4&usqp=CAc'),
+
+-- Obiektywy (25)
+('Sony FE 24-70mm f/2.8 GM II', 'Standardowy zoom profesjonalny', NOW(), NOW(), '2025-12-31', 9999, 23.00, 8, 'dostepny', 25, 'sredni', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcRrB-wazGJzcG-zVJf1yfCiI3b8Ui2JIMLNjVVCvhIBSvykNPtFav_MG3fC2RFcgul2fkhgpHx5Ebe7-ES3BobiI-w6R7l2tdxR_GaQ4iyYstw8ygdBG9qH3Q9WVhUdYgbX4PZjiIn3Dg&usqp=CAc'),
+('Canon RF 70-200mm f/2.8L IS USM', 'Teleobiektyw zoom', NOW(), NOW(), '2025-12-31', 11999, 23.00, 6, 'dostepny', 25, 'sredni', 'https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcT-SD_56mF0k5ciQ3-vAf-bkEYddkUOnOXpO4KtasbdNkw2fFWepN5LFZhpDpJQy34iXv8e0Hw1-txwez3kj7kkLPMDYNvs8oBNs9Nqa6yEB24ITG8p2LjvmGpYVoqU6le9V4MmLzc&usqp=CAc'),
+('Nikon Z 50mm f/1.8 S', 'Jasny obiektyw stałoogniskowy', NOW(), NOW(), '2025-12-31', 2999, 23.00, 15, 'dostepny', 25, 'maly', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSRqARY_3UN7z06prZkgkFJDMg7_VqIMYDV1pQcRrJUIyUzPN3-JEzicKszLw5w4ZBdUWS9p3rgwA6PrjJuCbhCud9fPq_tmVHQB2Oskdk8-2lUaR6BmdNQsJe7FSJyuRyP_LZZVGauzJU&usqp=CAc'),
+('Sigma 14-24mm f/2.8 DG DN Art', 'Szerokokątny zoom', NOW(), NOW(), '2025-12-31', 5999, 23.00, 10, 'dostepny', 25, 'sredni', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcTAd0Z3ufp6yVctvO6FuX4ixvgmW0jW08Cl7DPtrB8fuvY5hJ5ShLMFbL9C_aAR5gFFaLO8YdWCGQik6jUqAAhazzGixvae4YshXses8BIITGWZrJN_0FwLF1zKO0JyEz_nHO59k6XPRg&usqp=CAc'),
+
+-- Etui na telefony (27)
+('Spigen Ultra Hybrid iPhone 15', 'Przezroczyste etui ochronne', NOW(), NOW(), '2025-12-31', 89, 23.00, 100, 'dostepny', 27, 'maly', 'https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQQhid6cWlTBVikCTHwffmmn-51EYhb4e9LvF5xxGup48dTNtSuODOMmA2RT5YCX1n71DSUrIkOLtG-zqE77_QNg3o0jMUj5JmD4UAC43tNktRDRZGp-h6sk76FlAsN2O1CjeBzjPt4&usqp=CAc'),
+('Etui APPLE Clear iPhone 15 Pro', 'Przezroczyste etui ochronne', NOW(), NOW(), '2025-12-31', 249, 23.00, 100, 'dostepny', 27, 'maly', 'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcTfZpDr9xCROSI9Krs5Fo9e3uxD4ZJcwOKd0YV4k9dkhT8MGb0DHQY-6aRPlA6eLRyieGfGIGe8b-ySKDSmzS-WGRpHEdy4-Agcr4xC10f-s3JRZH5eO9s-rjWhYc-jJEd3lkOMpA&usqp=CAc'),
+('Etui UAG Monarch Pro Kevlar MagSafe do Apple iPhone 15 Pro Zielony', 'Wytrzymałe etui ochronne', NOW(), NOW(), '2025-12-31', 149, 23.00, 100, 'dostepny', 27, 'maly', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcRdtZQTdY09lFABoFQoCEJfkX1veeAG1P5wvtAteMqiMOJ89ddh7XOfqhs_oFMmWsZNnVlpWlI-fM8l2i-iPiub9WateXqtf5kvDadQqGS7d-S43QFU7WVIi9rA63HaAF2yV7POBw&usqp=CAc'),
+('Etui na laptopa SPIGEN Rugged Armor Pouch Pro 13-14 cali Czarny', 'Etui ochronne dla macbbook Air/Pro 13"-14" ', NOW(), NOW(), '2025-12-31', 49, 23.00, 100, 'dostepny', 27, 'maly', 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSF0acID8GSmpLtPr_BAyU0rN5Gu1w_bbX6YAS-FIG58mKxQe7PV5Wx9F2zqUV9XN-eZG-6ubQuA1YKQvWIadk0z820qr-6Uwf6I744auG7N4CSY1hUwXOfAYTT6VVqxUrwx-CnfxKRis4&usqp=CAc');

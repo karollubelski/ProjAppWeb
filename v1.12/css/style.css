@@ -4,6 +4,9 @@ body {
     padding: 0;
     color: #333;
     background-color: #f4f6f9;
+    min-height: 100vh;
+    display: flex;  
+    flex-direction: column;
 }
 
 ol{
@@ -46,6 +49,10 @@ ol{
 }
 
 .menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
     background-color: transparent;
     padding: 10px 0;
     text-align: center;
@@ -55,9 +62,10 @@ ol{
 .menu ul {
     list-style: none;
     margin: 0;
-    padding: 10;
+    padding: 0;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .menu ul li {
@@ -125,8 +133,9 @@ td {
 .footer {
     text-align: center;
     padding: 10px;
-    background-color: #282c34;
+    background-color: #393e46;
     color: white;
+    margin-top: auto;
 }
 
 .form-group {
@@ -188,6 +197,7 @@ button:hover {
     grid-template-columns: repeat(3, 1fr);
     gap: 0px;
     /* margin-top: 10px; */
+    margin-bottom: 100px;
 }
 
 .gal-gallery-item {
@@ -244,3 +254,53 @@ button:hover {
     font-size: 12px;
     white-space: nowrap;
 }
+
+/* Stylowanie samej ikony trybu ciemnego */
+#darkModeToggle {
+    position: absolute;
+    right: 20px;  /* odstęp od prawej strony */
+    transition: transform 0.3s ease;
+}
+#darkModeToggle:hover {
+    transform: scale(1.2); /* Powiększenie przy najechaniu */
+}
+
+
+/* Tryb ciemny */
+body.dark-mode {
+    background-color: #191818;
+    color: #e0e0e0;
+}
+
+/* Dostosowanie do ciemnego trybu */
+body.dark-mode .menu {
+    background-color: #1f1f1f;
+}
+
+body.dark-mode #darkModeToggle {
+    filter: invert(1); /* Odwrócenie kolorów ikonki w ciemnym trybie */
+}
+
+.top.dark-mode {
+    background-color: #1f1f1f;
+    color: #ffffff;
+}
+
+body.dark-mode .top {
+    background-color: #1f1f1f;
+    color: #ffffff; 
+}
+
+body.dark-mode .footer {
+    background-color: #1c1c1c; /* kolor tła */
+    color: #ffffff; /* kolor tekstu na biały */
+}
+
+.menu.dark-mode ul li a {
+    color: #e0e0e0;
+}
+
+.menu.dark-mode ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+

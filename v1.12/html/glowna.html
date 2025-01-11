@@ -13,6 +13,8 @@
         $(document).ready(function() {
             $(".skryptS img").on("click", function() {
                 var $img = $(this);
+                
+                // Jeśli zdjęcie jest już powiększone, zmniejsz je, w przeciwnym razie powiększ
                 if ($img.hasClass("expanded")) {
                     $img.animate({
                         width: "70%",
@@ -61,16 +63,3 @@
 
         </ol>
 </section>
-
-<h2 style="text-align:center">Zmień kolor tła</h2>
-<FORM method="post" name="background" style="text-align: center">
-    <input type="button" value="żółty" class="button-color" onclick="changeBackground('#FFF000')">
-    <input type="button" value="czarny" class="button-color" onclick="changeBackground('#000000')">
-    <input type="button" value="biały" class="button-color" onclick="changeBackground('#FFFFFF')">
-    <input type="button" value="zielony" class="button-color" onclick="changeBackground('#00FF00')">
-    <input type="button" value="niebieski" class="button-color" onclick="changeBackground('#0000FF')">
-    <input type="button" value="pomarańczowy" class="button-color" onclick="changeBackground('#FF8000')">
-    <input type="button" value="szary" class="button-color" onclick="changeBackground('#c0c0c0')">
-    <input type="button" value="czerwony" class="button-color" onclick="changeBackground('#FF0000')">
-</FORM>
-<!-- <button style="display:block;margin: 75px auto 0; text-align: center;margin-bottom: 20px;"onclick="window.location.href='html/js.html'">Skrypty z zajęć</button> -->
